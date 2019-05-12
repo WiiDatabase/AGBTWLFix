@@ -13,14 +13,14 @@ void exitServices() {
 }
 
 void exitApplication() {
-	printf("\n\nPress START to exit");	
-	while (aptMainLoop()) {
-		hidScanInput();
-		if (hidKeysDown() & KEY_START) { 
-			exitServices();
-			exit(0);
-		}
-	}
+    printf("\n\nPress START to exit");  
+    while (aptMainLoop()) {
+        hidScanInput();
+        if (hidKeysDown() & KEY_START) { 
+            exitServices();
+            exit(0);
+        }
+    }
 }
 
 void initServices() {
@@ -32,17 +32,17 @@ void initServices() {
     
     // Initialize services
     printf("Initializing services...\n");
-	if (R_FAILED(aptInit())) {
-		printf(CONSOLE_RED "Failed to initialize APT services" CONSOLE_RESET "\n");
-		exitApplication();
-	}
-	if (R_FAILED(amInit())) {
-		printf(CONSOLE_RED "Failed to initialize AM services" CONSOLE_RESET "\n");
-		exitApplication();
-	}
-	if (R_FAILED(ptmSysmInit())) {
-		printf(CONSOLE_RED "Failed to initialize PTM services" CONSOLE_RESET "\n");
-		exitApplication();
+    if (R_FAILED(aptInit())) {
+        printf(CONSOLE_RED "Failed to initialize APT services" CONSOLE_RESET "\n");
+        exitApplication();
+    }
+    if (R_FAILED(amInit())) {
+        printf(CONSOLE_RED "Failed to initialize AM services" CONSOLE_RESET "\n");
+        exitApplication();
+    }
+    if (R_FAILED(ptmSysmInit())) {
+        printf(CONSOLE_RED "Failed to initialize PTM services" CONSOLE_RESET "\n");
+        exitApplication();
     }
 }
 
@@ -57,11 +57,11 @@ int main(int argc, char** argv) {
         0x0004800542383841, // DS Internet
         0x00048005484E4441 // DS DLP
     };
-	if (isNew3DS) {
-		titleList[3] = 0x0004013820000102; // New3DS TWL FIRM
+    if (isNew3DS) {
+        titleList[3] = 0x0004013820000102; // New3DS TWL FIRM
         titleList[4] = 0x0004013820000202; // New3DS AGB FIRM
-	} else {
-		titleList[3] = 0x0004013800000102; // Old3DS TWL FIRM
+    } else {
+        titleList[3] = 0x0004013800000102; // Old3DS TWL FIRM
         titleList[4] = 0x0004013800000202; // Old3DS AGB FIRM
     }
     
@@ -88,24 +88,24 @@ int main(int argc, char** argv) {
     for(int i = 0; i < sizeof(titleList) / sizeof(u64); i++) {
         printf("Uninstalling title %llx...\n", titleList[i]);
         if (R_FAILED(AM_DeleteTitle(MEDIATYPE_NAND, titleList[i]))) {
-			printf(CONSOLE_RED "Failed!" CONSOLE_RESET "\n");
-		} else {
-			printf(CONSOLE_GREEN "Success!" CONSOLE_RESET "\n");
+            printf(CONSOLE_RED "Failed!" CONSOLE_RESET "\n");
+        } else {
+            printf(CONSOLE_GREEN "Success!" CONSOLE_RESET "\n");
         }
     }
     
     printf("\nDone!\nReboot and then open System Update.\n\nPress START to reboot.\n");
-	while (aptMainLoop()) {
-		hidScanInput();
-		if (hidKeysDown() & KEY_START) { 
-			break;
-		}
+    while (aptMainLoop()) {
+        hidScanInput();
+        if (hidKeysDown() & KEY_START) { 
+            break;
+        }
         
         // Flush and swap framebuffers
         gfxFlushBuffers();
         gfxSwapBuffers();
         gspWaitForVBlank();
-	}
+    }
     
     printf("Rebooting...\n");
     PTMSYSM_RebootAsync(0);
